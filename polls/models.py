@@ -1,7 +1,7 @@
+import secrets
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
-import secrets
 
 
 class Poll(models.Model):
@@ -12,7 +12,7 @@ class Poll(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def user_can_vote(self, user):
-        """ 
+        """
         Return False if user already voted
         """
         user_votes = user.vote_set.all()
@@ -29,17 +29,23 @@ class Poll(models.Model):
         res = []
         for choice in self.choice_set.all():
             d = {}
-            alert_class = ['primary', 'secondary', 'success',
-                           'danger', 'dark', 'warning', 'info']
+            alert_class = [
+                "primary",
+                "secondary",
+                "success",
+                "danger",
+                "dark",
+                "warning",
+                "info",
+            ]
 
-            d['alert_class'] = secrets.choice(alert_class)
-            d['text'] = choice.choice_text
-            d['num_votes'] = choice.get_vote_count
+            d["alert_class"] = secrets.choice(alert_class)
+            d["text"] = choice.choice_text
+            d["num_votes"] = choice.get_vote_count
             if not self.get_vote_count:
-                d['percentage'] = 0
+                d["percentage"] = 0
             else:
-                d['percentage'] = (choice.get_vote_count /
-                                   self.get_vote_count)*100
+                d["percentage"] = (choice.get_vote_count / self.get_vote_count) * 100
 
             res.append(d)
         return res
@@ -70,4 +76,4 @@ class Vote(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.poll.text[:15]} - {self.choice.choice_text[:15]} - {self.user.username}'
+        return f"{self.poll.text[:15]} - {self.choice.choice_text[:15]} - {self.user.username}"

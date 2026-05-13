@@ -90,7 +90,7 @@ jobs:
           python manage.py shell -c "import seeder; seeder.seed_test()"
 
       - name: Start development server
-        run: python manage.py runserver 127.0.0.1:8000
+        run: python manage.py runserver 127.0.0.1:8000 &
 
       - name: Wait for server to be ready
         run: npx wait-on http://127.0.0.1:8000 --timeout 60000

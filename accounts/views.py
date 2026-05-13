@@ -1,9 +1,9 @@
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from .forms import UserRegistrationForm
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from .forms import UserRegistrationForm
 
 
 def login_user(request):

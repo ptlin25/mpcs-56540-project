@@ -1,7 +1,7 @@
+from unittest.mock import MagicMock, patch
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.test import TestCase
-from unittest.mock import MagicMock, patch
 
 from .models import Poll, Vote
 

@@ -1,3 +1,4 @@
+"""Poll app views"""
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -241,5 +242,5 @@ def end_poll(request, poll_id):
         poll.active = False
         poll.save()
         return render(request, "polls/poll_result.html", {"poll": poll})
-    else:
-        return render(request, "polls/poll_result.html", {"poll": poll})
+    
+    return render(request, "polls/poll_result.html", {"poll": poll})

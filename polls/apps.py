@@ -1,3 +1,4 @@
+"""Poll app registration"""
 from django.apps import AppConfig
 
 

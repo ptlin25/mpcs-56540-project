@@ -25,14 +25,24 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-## To Create some dummy text data for your app follow the step below:
+## To create some dummy text data for your app, follow the steps below:
 ```
-pip install faker
 python manage.py shell
 import seeder
 seeder.seed_all(30)
 ```
 Here 30 is a number of entry. You can use it as your own
+
+## To create dummy data for the performance tests, follow the steps below:
+```
+python manage.py shell
+import seeder
+seeder.seed_test()
+```
+This creates 
+- user1, ..., user200  (password: password)
+- 30 polls (IDs 1-30 on a fresh DB), 2 choices each
+- Poll 30 is inactive so GET /polls/30/ renders the results page
 
 ## To run the program in local server use the following command
 

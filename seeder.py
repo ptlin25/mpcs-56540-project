@@ -98,7 +98,7 @@ def seed_test():
     Creates predictable load-test fixtures for locustfile.py.
     Run on a fresh DB after: python manage.py migrate
 
-      - user1 … user200  (password: password)
+      - user1, ..., user200  (password: password)
       - 30 polls (IDs 1-30 on a fresh DB), 2 choices each
       - Poll 30 is inactive so GET /polls/30/ renders the results page
     """

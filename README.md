@@ -9,6 +9,7 @@ These instructions will get you a copy of the project up and running on your loc
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
+playwright install
 ```
 
 
@@ -64,11 +65,11 @@ LOCUST_TEST_PROFILE=spike locust -f locustfile.py
 ```
 
 ## To run the Q5 tests
-#### Run the program in one terminal
-```
-python manage.py runserver
-```
-#### Open another terminal with the virtual environment activated and run
 ```
 pytest tests/test_e2e.py -v
+```
+
+## To run the Q6 tests
+```
+pytest tests/test_integration.py -v
 ```

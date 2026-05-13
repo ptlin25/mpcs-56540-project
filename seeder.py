@@ -93,6 +93,29 @@ def seed_votes():
     print()
 
 
+def seed_test():
+    """
+    Creates predictable load-test fixtures for locustfile.py.
+    Run on a fresh DB after: python manage.py migrate
+
+      - user1 … user200  (password: password)
+      - 30 polls (IDs 1-30 on a fresh DB), 2 choices each
+      - Poll 30 is inactive so GET /polls/30/ renders the results page
+    """
+    owner = User.objects.create_user(username="user1", password="password")
+    for i in range(2, 201):
+        User.objects.create_user(username=f"user{i}", password="password")
+
+    for i in range(1, 31):
+        p = Poll.objects.create(
+            owner=owner,
+            text=f"Test poll {i}",
+            active=(i != 30),
+        )
+        Choice.objects.create(poll=p, choice_text="Choice A")
+        Choice.objects.create(poll=p, choice_text="Choice B")
+
+
 def seed_all(num_entries=10, overwrite=False):
     """
     Runs all seeder functions. Passes value of overwrite to all

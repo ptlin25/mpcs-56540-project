@@ -68,7 +68,36 @@ jobs:
       - name: Run integration tests
         run: pytest tests/test_integration.py -v
 
-  
+  load-test:
+    name: Load test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Apply migrations and seed database
+        run: |
+          python manage.py migrate
+          python manage.py shell -c "import seeder; seeder.seed_test()"
+
+      - name: Start development server
+        run: python manage.py runserver 127.0.0.1:8000 &
+
+      - name: Wait for server to be ready
+        run: npx wait-on http://127.0.0.1:8000 --timeout 60000
+
+      - name: Run load test
+        run: LOCUST_TEST_PROFILE=load locust -f locustfile.py --headless
+
+
   spike-test:
     name: Spike test
     runs-on: ubuntu-latest
@@ -95,7 +124,7 @@ jobs:
       - name: Wait for server to be ready
         run: npx wait-on http://127.0.0.1:8000 --timeout 60000
 
-      - name: Run load test
+      - name: Run spike test
         run: LOCUST_TEST_PROFILE=spike locust -f locustfile.py --headless
 
 

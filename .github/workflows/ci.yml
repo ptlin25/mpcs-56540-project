@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: pylint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pylint
+        env:
+          DJANGO_SETTINGS_MODULE: pollme.settings
+        run: pylint polls accounts pollme
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Apply migrations
+        run: python manage.py migrate
+
+      - name: Run unit tests with coverage
+        run: coverage run manage.py test polls accounts
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Apply migrations
+        run: python manage.py migrate
+
+      - name: Run integration tests
+        run: pytest tests/test_integration.py -v
+
+  
+  spike-test:
+    name: Spike test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Apply migrations and seed database
+        run: |
+          python manage.py migrate
+          python manage.py shell -c "import seeder; seeder.seed_test()"
+
+      - name: Start development server
+        run: python manage.py runserver 127.0.0.1:8000
+
+      - name: Wait for server to be ready
+        run: npx wait-on http://127.0.0.1:8000 --timeout 60000
+
+      - name: Run load test
+        run: LOCUST_TEST_PROFILE=spike locust -f locustfile.py --headless
+
+
+  e2e-tests:
+    name: E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Playwright browser and system dependencies
+        run: playwright install
+
+      - name: Apply migrations
+        run: python manage.py migrate
+
+      - name: Run E2E tests
+        run: pytest tests/test_e2e.py -v

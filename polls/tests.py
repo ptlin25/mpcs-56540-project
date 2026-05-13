@@ -147,7 +147,7 @@ class PollVoteTest(TestCase):
         # Arrange
         owner = User.objects.create_user("mock_owner", password="pass")
         voter = User.objects.create_user("mock_voter", password="pass")
-        poll = Poll.object.create(owner=owner, text="Q?")
+        poll = Poll.objects.create(owner=owner, text="Q?")
         choice = poll.choice_set.create(choice_text="Yes")
 
         self.client.login(username="mock_voter", password="pass")

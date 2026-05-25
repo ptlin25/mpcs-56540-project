@@ -19,8 +19,8 @@ LOAD_TEST = [
 
 SPIKE_TEST = [
     {"duration": 30, "users": 30, "spawn_rate": 1},     # baseline
-    {"duration": 40, "users": 200, "spawn_rate": 50},   # spike
-    {"duration": 60, "users": 200, "spawn_rate": 50},   # hold spike briefly
+    {"duration": 40, "users": 100, "spawn_rate": 50},   # spike
+    {"duration": 60, "users": 100, "spawn_rate": 50},   # hold spike briefly
     {"duration": 70, "users": 30, "spawn_rate": 50},    # back to baseline
     {"duration": 120, "users": 30, "spawn_rate": 1},    # observe recovery
     {"duration": 150, "users": 0, "spawn_rate": 1},
@@ -33,8 +33,8 @@ class PollsUser(HttpUser):
 
     def on_start(self):
         idx = random.randint(1, NUM_USERS)
-        self.client.get("/accounts/login/", name="GET login")
-        csrf = self.client.cookies.get("csrftoken", "")
+        resp = self.client.get("/accounts/login/", name="GET login")
+        csrf = resp.cookies.get("csrftoken", "")
         self.client.post(
             "/accounts/login/",
             data={

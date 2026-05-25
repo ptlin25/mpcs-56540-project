@@ -210,3 +210,6 @@ class UserCanVoteFakeTest(TestCase):
 
         # Assert
         self.assertFalse(poll.user_can_vote(fake_user))
+
+    def test_unit_test_fails_pipeline():
+        assert False

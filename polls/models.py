@@ -52,7 +52,7 @@ class Poll(models.Model):
         return res
 
     def __str__(self):
-        return self.text
+        return str(self.text)
 
 
 class Choice(models.Model):

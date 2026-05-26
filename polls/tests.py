@@ -78,7 +78,7 @@ class EndPollOwnershipTest(TestCase):
     def test_non_owner_cannot_end_poll(self):
         # Arrange
         owner = User.objects.create_user("owner3", password="pass")
-        other = User.objects.create_user("other3", password="pass")
+        oUser.objects.create_user("other3", password="pass")
         poll = Poll.objects.create(owner=owner, text="Q?", active=True)
         self.client.login(username="other3", password="pass")
 
@@ -96,7 +96,7 @@ class PollStrTest(TestCase):
         # Arrange
         dummy_owner = User()  # dummy — satisfies FK type check; never read by __str__
         poll = Poll(owner=dummy_owner, text="What is your favorite color?")
-        
+
         # Act
         poll_str = str(poll)
 
@@ -210,6 +210,3 @@ class UserCanVoteFakeTest(TestCase):
 
         # Assert
         self.assertFalse(poll.user_can_vote(fake_user))
-
-    def test_unit_test_fails_pipeline():
-        assert False

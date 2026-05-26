@@ -78,7 +78,7 @@ class EndPollOwnershipTest(TestCase):
     def test_non_owner_cannot_end_poll(self):
         # Arrange
         owner = User.objects.create_user("owner3", password="pass")
-        oUser.objects.create_user("other3", password="pass")
+        User.objects.create_user("other3", password="pass")
         poll = Poll.objects.create(owner=owner, text="Q?", active=True)
         self.client.login(username="other3", password="pass")
 
